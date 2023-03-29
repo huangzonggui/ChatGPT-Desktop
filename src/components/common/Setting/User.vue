@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
 import type { FormInst, FormItemRule, FormRules } from 'naive-ui'
-import { NButton, NForm, NFormItem, NInput, NRadio, NRadioGroup, NSelect, useMessage } from 'naive-ui'
+import { NButton, NForm, NFormItem, NInput, NRadio, NRadioGroup, NSelect, NTooltip, useMessage } from 'naive-ui'
 import { useUserStore } from '@/store'
 import { t } from '@/locales'
 import { genOptionByList } from '@/utils/functions'
@@ -124,23 +124,29 @@ function saveUserInfo() {
         <NInput v-model:value="model.name" :placeholder="$t('setting.namePlaceholder')" />
       </NFormItem>
       <NFormItem path="type" label="访问方式">
-        <NRadioGroup v-model:value="model.accessType">
-          <NRadio value="0">
-            API key
-          </NRadio>
-          <NRadio value="1">
-            Access Token
-          </NRadio>
-        </NRadioGroup>
+        <NTooltip trigger="hover">
+          <template #trigger>
+            <NRadioGroup v-model:value="model.accessType">
+              <NRadio value="0">
+                API key
+              </NRadio>
+              <NRadio value="1">
+                Access Token
+              </NRadio>
+            </NRadioGroup>
+          </template>
+          API Key Host 要修改为官方API https://api.openai.com/v1/chat/completions;
+          Access Token 要修改为代理 https://bypass.duti.tech/api/conversation;
+        </NTooltip>
+      </NFormItem>
+      <NFormItem path="host" label="Host">
+        <NSelect v-model:value="model.host" placeholder="Select" :options="genOptionByList(model.hostList)" />
       </NFormItem>
       <NFormItem path="apiKey" label="Openai API Key">
         <NSelect v-model:value="model.apiKey" placeholder="Select" :options="genOptionByList(model.apiKeyList)" />
       </NFormItem>
       <NFormItem path="accessToken" label="Access Token">
         <NSelect v-model:value="model.accessToken" placeholder="Select" :options="genOptionByList(model.accessTokenList)" />
-      </NFormItem>
-      <NFormItem path="host" label="Host">
-        <NSelect v-model:value="model.host" placeholder="Select" :options="genOptionByList(model.hostList)" />
       </NFormItem>
       <NFormItem path="modelName" label="Model Name">
         <NSelect v-model:value="model.modelName" placeholder="Select" :options="models" />

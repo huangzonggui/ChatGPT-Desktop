@@ -168,14 +168,14 @@ async function onRegenerate(index: number) {
   if (loading.value)
     return
 
-  const { requestOptions } = dataSources.value[index]
+  const { requestOptions } = dataSources.value[index - 1]
   const message = requestOptions?.prompt ?? ''
   let options: Chat.ConversationRequest = {}
 
   if (requestOptions.options)
     options = { ...requestOptions.options }
 
-  const messages = await buildRequestMessages(+uuid, index)
+  const messages = await buildRequestMessages(+uuid, index - 1)
   if (!messages || messages.length === 0)
     return
 
