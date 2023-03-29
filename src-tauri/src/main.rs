@@ -38,7 +38,8 @@ fn main() {
   let mut builder = tauri::Builder::default()
   .plugin(log.build())
   .invoke_handler(tauri::generate_handler![
-    cmd::gpt::fetch_chat_api,
+    cmd::gpt_access_token::fetch_chat_api_by_access_token,
+    cmd::gpt_api_key::fetch_chat_api_by_api_key,
     cmd::download::download_img,
     cmd::window::new_window
   ])
@@ -59,7 +60,7 @@ fn main() {
       }
     })
   }
-  
+
   builder.run(tauri::generate_context!())
   .expect("error while running tauri application");
 }

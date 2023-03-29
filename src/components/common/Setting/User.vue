@@ -25,6 +25,17 @@ const models = userStore.allModels().map(v => ({
   value: v,
 }))
 
+const hosts = [
+  {
+    label: 'apiKey: https://api.openai.com/v1/chat/completions',
+    value: 'https://api.openai.com/v1/chat/completions',
+  },
+  {
+    label: 'accesstoken 代理：https://bypass.duti.tech/api/conversation',
+    value: 'https://bypass.duti.tech/api/conversation',
+  },
+]
+
 const rules: FormRules = {
   name: [
     {
@@ -58,8 +69,8 @@ const rules: FormRules = {
       validator(rule: FormItemRule, value: string) {
         if (!value)
           return new Error('不能为空')
-        else if (!/^sk-\w+$/.test(value))
-          return new Error('请输入正确的api-key')
+        // else if (!/^sk-\w+$/.test(value))
+        //   return new Error('请输入正确的api-key')
 
         return true
       },
@@ -108,14 +119,17 @@ function saveUserInfo() {
       <NFormItem path="name" :label="$t('setting.name')">
         <NInput v-model:value="model.name" :placeholder="$t('setting.namePlaceholder')" />
       </NFormItem>
-      <NFormItem path="apiKey" label="Openai API Key">
+      <NFormItem path="apiKey" label="Openai API Key Or Access Token">
         <NInput v-model:value="model.apiKey" placeholder="Openai API Key" />
+      </NFormItem>
+      <NFormItem path="host" label="手动输入 Host">
+        <NInput v-model:value="model.host" placeholder="" default-value="https://bypass.duti.tech/api/conversation" />
+      </NFormItem>
+      <NFormItem path="host" label="下拉选择 Host">
+        <NSelect v-model:value="model.host" placeholder="Select" :options="hosts" />
       </NFormItem>
       <NFormItem path="modelName" label="Model Name">
         <NSelect v-model:value="model.modelName" placeholder="Select" :options="models" />
-      </NFormItem>
-      <NFormItem path="host" label="Host">
-        <NInput v-model:value="model.host" placeholder="" />
       </NFormItem>
       <NFormItem path="proxy" label="Proxy">
         <NInput v-model:value="model.proxy" placeholder="socks5://127.0.0.1:7890" />

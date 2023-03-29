@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia'
 import { NAutoComplete, NButton, NInput, useDialog, useMessage, useNotification } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { invoke } from '@tauri-apps/api'
+import * as _ from 'lodash'
 import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
 import { useChat } from './hooks/useChat'
@@ -50,7 +51,7 @@ function handleSubmit() {
   onConversation()
 }
 
-async function fetchChatMessage(messages: Chat.RequestMessage[], uuid: number, index: number) {
+async function fetchChatMessage(messages: Chat.RequestMessage[], uuid: number, index: number, options?: Chat.ConversationRequest) {
   const option = getSessionConfig(uuid)
   const apiKey = option.apiKey
   if (!apiKey || apiKey.trim() === '') {
@@ -60,11 +61,18 @@ async function fetchChatMessage(messages: Chat.RequestMessage[], uuid: number, i
   controller = new AbortController()
 
   let lastText = ''
+  const merge_options = _.merge(option, options)
   await fetchChatAPIProcess(
     messages,
-    option,
-    (detail: string, _: string) => {
-      lastText = lastText + detail ?? ''
+    merge_options,
+    (detail: string, _: string, conversation_id?: string, parent_message_id?: string) => {
+      if (apiKey.startsWith('sk-'))
+        lastText = lastText + detail ?? ''
+      else
+        lastText = detail ?? ''
+
+      const prompt: string = messages[messages.length - 1]?.content ?? ''
+      const new_options = { conversationId: conversation_id, parentMessageId: parent_message_id }
       updateChat(+uuid, index,
         {
           dateTime: new Date().toLocaleString(),
@@ -72,11 +80,14 @@ async function fetchChatMessage(messages: Chat.RequestMessage[], uuid: number, i
           inversion: false,
           error: false,
           loading: false,
+          conversationOptions: { conversationId: conversation_id, parentMessageId: '' },
+          requestOptions: { prompt, options: { ...new_options } },
         },
       )
-      scrollToBottom()
+      // scrollToBottom()
     },
     (error: Error) => {
+      const prompt: string = messages[messages.length - 1]?.content ?? ''
       const errorMessage = error?.message ?? t('common.wrong')
       if (errorMessage === 'canceled') {
         updateChatSome(+uuid, index,
@@ -96,6 +107,8 @@ async function fetchChatMessage(messages: Chat.RequestMessage[], uuid: number, i
             inversion: false,
             error: true,
             loading: false,
+            conversationOptions: null,
+            requestOptions: { prompt, ...options },
           },
         )
       }
@@ -112,6 +125,8 @@ async function onConversation() {
   if (!message || message.trim() === '')
     return
 
+  const options: Chat.ConversationRequest = (dataSources?.value?.slice(-1)[0]?.requestOptions?.options ?? {}) as Chat.ConversationRequest
+
   addChat(
     +uuid,
     {
@@ -119,13 +134,17 @@ async function onConversation() {
       text: message,
       inversion: true,
       error: false,
+      conversationOptions: null,
+      requestOptions: { prompt: message, options: null },
     },
   )
   scrollToBottom()
 
   loading.value = true
   prompt.value = ''
+
   const messages: Chat.RequestMessage[] = await buildRequestMessages(+uuid, dataSources.value.length - 1)
+
   addChat(
     +uuid,
     {
@@ -134,11 +153,13 @@ async function onConversation() {
       loading: true,
       inversion: false,
       error: false,
+      conversationOptions: null,
+      requestOptions: { prompt: message, options: { ...options } },
     },
   )
   scrollToBottom()
 
-  await fetchChatMessage(messages, +uuid, dataSources.value.length - 1)
+  await fetchChatMessage(messages, +uuid, dataSources.value.length - 1, options)
   scrollToBottom()
   loading.value = false
 }
@@ -146,6 +167,13 @@ async function onConversation() {
 async function onRegenerate(index: number) {
   if (loading.value)
     return
+
+  const { requestOptions } = dataSources.value[index]
+  const message = requestOptions?.prompt ?? ''
+  let options: Chat.ConversationRequest = {}
+
+  if (requestOptions.options)
+    options = { ...requestOptions.options }
 
   const messages = await buildRequestMessages(+uuid, index)
   if (!messages || messages.length === 0)
@@ -161,10 +189,12 @@ async function onRegenerate(index: number) {
       inversion: false,
       error: false,
       loading: true,
+      conversationOptions: null,
+      requestOptions: { prompt: message, ...options },
     },
   )
 
-  await fetchChatMessage(messages, +uuid, index)
+  await fetchChatMessage(messages, +uuid, index, options)
 
   loading.value = false
 }

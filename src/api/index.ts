@@ -7,6 +7,8 @@ interface ProgressPayload {
   detail: string
   finish_reason: string
   role: string
+  conversation_id?: string
+  parent_message_id?: string
 }
 
 type ProgressHandler = (payload: ProgressPayload) => void
@@ -28,8 +30,8 @@ async function listenToEventIfNeeded(): Promise<void> {
 
 export async function fetchChatAPIProcess(
   messages: Chat.RequestMessage[],
-  option: Chat.ChatOptions,
-  progressHandler?: (detail: string, role: string) => void,
+  option: Chat.ChatOptions & Chat.ConversationRequest,
+  progressHandler?: (detail: string, role: string, conversation_id?: string, parent_message_id?: string) => void,
   errorHandle?: (err: Error) => void,
   signal?: GenericAbortSignal,
 ) {
@@ -39,7 +41,7 @@ export async function fetchChatAPIProcess(
 
   if (progressHandler != null) {
     handlers.set(id, (payload) => {
-      progressHandler(payload.detail, payload.role)
+      progressHandler(payload.detail, payload.role, payload.conversation_id, payload.parent_message_id)
     })
   }
   await listenToEventIfNeeded()
@@ -53,7 +55,11 @@ export async function fetchChatAPIProcess(
       }
     }
   }
-  await invoke('fetch_chat_api', {
+  let acceess_type = 'fetch_chat_api_by_access_token'
+  if (option.apiKey.startsWith('sk-'))
+    acceess_type = 'fetch_chat_api_by_api_key'
+
+  await invoke(acceess_type, {
     id,
     messages,
     option,

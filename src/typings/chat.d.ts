@@ -8,6 +8,8 @@ declare namespace Chat {
 		inversion?: boolean
 		error?: boolean
 		loading?: boolean
+		conversationOptions?: ConversationRequest | null
+		requestOptions: { prompt: string; options?: ConversationRequest | null }
 	}
 
 	interface History {
@@ -26,7 +28,7 @@ declare namespace Chat {
 
 	// 一个聊天会话
 	interface ChatSession {
-		uuid: number 
+		uuid: number
 		data: Chat[]
 		opt: Partial<ChatOptions>
 	}
@@ -36,6 +38,12 @@ declare namespace Chat {
 		history: History[]
 		chat: ChatSession[]
 	}
+
+	interface ConversationRequest {
+		conversationId?: string
+		parentMessageId?: string
+	}
+
 
 	interface RequestMessage {
 		role: string

@@ -27,7 +27,8 @@
         "all": true,
         "request": true,
         "scope": [
-          "https://api.openai.com/v1/*"
+          "https://api.openai.com/v1/*",
+          "https://bypass.duti.tech/api/*"
         ]
       },
       "shell": {

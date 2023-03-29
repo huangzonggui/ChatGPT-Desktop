@@ -25,13 +25,14 @@ export function defaultSetting(): UserState {
   return {
     userInfo: {
       avatar: '',
-      name: null,
+      name: 'Tom',
     },
     userConfig: {
       modelName: 'gpt-3.5-turbo',
       apiKey: import.meta.env.VITE_GLOB_OPENAI_KEY,
-      proxy: null,
-      host: 'https://api.openai.com/v1/chat/completions',
+      proxy: 'socks5://127.0.0.1:7890',
+      // host: 'https://api.openai.com/v1/chat/completions',
+      host: 'https://bypass.duti.tech/api/conversation',
       maxTokenNum: 4096,
     },
   }
