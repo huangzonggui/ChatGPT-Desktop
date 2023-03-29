@@ -226,19 +226,21 @@ async function checkAppUpdate() {
 
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">Api Key 列表</span>
-        <div class="flex flex-wrap items-center gap-4">
+        <div class="flex-wrap items-center gap-4">
           <NInputGroup>
-            <NInput v-model:value="model.apiKey" />
             <NButton @click="userStore.addApiKey(model.apiKey)">
               添加
             </NButton>
+            <NInput v-model:value="model.apiKey" />
           </NInputGroup>
           <NList>
             <NListItem v-for="item in userStore.userConfig.apiKeyList" :key="item">
-              <NTag> {{ item }} </NTag>
               <NButton @click="userStore.deleteApiKey(item)">
                 删除
               </NButton>
+              <NTag type="info" class="m-2">
+                {{ item }}
+              </NTag>
             </NListItem>
           </NList>
         </div>
@@ -248,19 +250,19 @@ async function checkAppUpdate() {
         <span class="flex-shrink-0 w-[100px]">Access Token 列表</span>
         <div class="flex flex-wrap items-center gap-4">
           <NInputGroup>
-            <NInput v-model:value="model.accessToken" />
             <NButton @click="userStore.addAccessToken(model.accessToken)">
               添加
             </NButton>
+            <NInput v-model:value="model.accessToken" class="w-[300px]" />
           </NInputGroup>
           <NList>
             <NListItem v-for="item in userStore.userConfig.accessTokenList" :key="item">
-              <NTag type="info" class="mr-2">
-                {{ item }}
-              </NTag>
               <NButton @click="userStore.deleteAccessToken(item)">
                 删除
               </NButton>
+              <NTag type="info" class="m-2">
+                {{ item }}
+              </NTag>
             </NListItem>
           </NList>
         </div>
@@ -270,17 +272,19 @@ async function checkAppUpdate() {
         <span class="flex-shrink-0 w-[100px]">Host 列表</span>
         <div class="flex flex-wrap items-center gap-4">
           <NInputGroup>
-            <NInput v-model:value="model.host" />
             <NButton @click="userStore.addHost(model.host)">
               添加
             </NButton>
+            <NInput v-model:value="model.host" />
           </NInputGroup>
           <NList>
             <NListItem v-for="item in userStore.userConfig.hostList" :key="item">
-              <NTag> {{ item }} </NTag>
               <NButton @click="userStore.deleteHost(item)">
                 删除
               </NButton>
+              <NTag type="info" class="m-2">
+                {{ item }}
+              </NTag>
             </NListItem>
           </NList>
         </div>

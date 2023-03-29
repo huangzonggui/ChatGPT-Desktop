@@ -12,6 +12,7 @@ export const useUserStore = defineStore('user-store', {
 
     addApiKey(apiKey: string) {
       this.userConfig.apiKeyList.push(apiKey)
+      this.recordState()
     },
 
     deleteApiKey(apiKey: string) {
@@ -21,6 +22,7 @@ export const useUserStore = defineStore('user-store', {
 
     addAccessToken(accessToken: string) {
       this.userConfig.accessTokenList.push(accessToken)
+      this.recordState()
     },
 
     deleteAccessToken(accessToken: string) {

@@ -3,14 +3,17 @@
   "version": "0.0.0",
   "private": false,
   "description": "ChatGPT Tauri",
-  "author": "pljhonglu@gmail.com",
-  "homepage": "https://github.com/pljhonglu/ChatGPT-T",
+  "author": "hzg1226620085@gmail.com",
+  "homepage": "https://github.com/huangzonggui/ChatGPT-Desktop",
   "keywords": [
     "chatgpt-tauri",
     "chatgpt",
     "chatbot",
     "vue",
-    "tauri"
+    "tauri",
+    "desktop",
+    "access token",
+    "app"
   ],
   "scripts": {
     "dev:fe": "vite",

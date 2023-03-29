@@ -31,7 +31,7 @@ const show = computed({
 </script>
 
 <template>
-  <NModal v-model:show="show" :auto-focus="false" preset="card" :title="$t('setting.setting')" style="width: 95%; max-width: 640px;">
+  <NModal v-model:show="show" :auto-focus="false" preset="card" :title="$t('setting.setting')" style="width: 95%; max-width: 1080px; margin: 20px auto;">
     <div>
       <NTabs v-model:value="active" type="line" animated>
         <NTabPane name="User" tab="User">
