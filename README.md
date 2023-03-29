@@ -6,7 +6,8 @@ __该客户端支持 open-api 和 access token 的方式使用__
 ## 预览
 
 ![demo](docs/s1.png)
-![demo](docs/s2.png)
+![](./docs/2023-03-29-21-31-29.png)
+![](./docs/2023-03-29-21-32-38.png)
 
 ## 介绍
 
