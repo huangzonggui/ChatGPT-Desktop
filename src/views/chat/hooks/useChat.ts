@@ -29,6 +29,8 @@ export function useChat() {
 
     const defaultOpt = {
       apiKey: userStore.userConfig.apiKey,
+      accessToken: userStore.userConfig.accessToken,
+      accessType: userStore.userConfig.accessType,
       host: userStore.userConfig.host,
       proxy: userStore.userConfig.proxy,
       model: userStore.userConfig.modelName,

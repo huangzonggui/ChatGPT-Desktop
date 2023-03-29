@@ -20,6 +20,8 @@ declare namespace Chat {
 
 	interface ChatOptions {
 		apiKey: string
+		accessToken: string
+		accessType: string
 		proxy: string | null
 		model: string
 		systemMessage: string

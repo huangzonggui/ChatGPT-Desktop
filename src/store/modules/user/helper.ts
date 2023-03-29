@@ -11,9 +11,14 @@ export interface UserInfo {
 export interface UserConfig {
   modelName: string
   apiKey: string
+  accessToken: string
   host: string
   proxy: string | null
+  accessType: string
   maxTokenNum: number
+  apiKeyList: string[]
+  accessTokenList: string[]
+  hostList: string[]
 }
 
 export interface UserState {
@@ -29,11 +34,15 @@ export function defaultSetting(): UserState {
     },
     userConfig: {
       modelName: 'gpt-3.5-turbo',
+      accessType: '0', // 0: apiKey, 1: accessToken
       apiKey: import.meta.env.VITE_GLOB_OPENAI_KEY,
+      accessToken: import.meta.env.VITE_GLOB_ACCESS_TOKEN,
       proxy: 'socks5://127.0.0.1:7890',
-      // host: 'https://api.openai.com/v1/chat/completions',
       host: 'https://bypass.duti.tech/api/conversation',
       maxTokenNum: 4096,
+      apiKeyList: [],
+      accessTokenList: [],
+      hostList: ['https://bypass.duti.tech/api/conversation', 'https://api.openai.com/v1/chat/completions'],
     },
   }
 }

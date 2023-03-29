@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "ChatGPT-Tauri",
+    "productName": "ChatGPT-Tauri-App",
     "version": "0.1.4"
   },
   "tauri": {
@@ -67,7 +67,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "me.honglu.chatgpt",
+      "identifier": "me.hzg.chatgpt",
       "longDescription": "ChatGPT Desktop Application",
       "macOS": {
         "entitlements": null,
@@ -77,7 +77,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "ChatGPT-Tauri",
+      "shortDescription": "ChatGPT-Tauri-App",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,

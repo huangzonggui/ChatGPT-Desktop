@@ -1,16 +1,23 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { NButton, NPopconfirm, NSelect, useMessage } from 'naive-ui'
+import { NButton, NInput, NInputGroup, NList, NListItem, NPopconfirm, NSelect, NTag, useMessage } from 'naive-ui'
 import { checkUpdate, installUpdate } from '@tauri-apps/api/updater'
 import { relaunch } from '@tauri-apps/api/process'
 import type { Language, Theme } from '@/store/modules/app/helper'
 import { SvgIcon } from '@/components/common'
-import { useAppStore } from '@/store'
+import { useAppStore, useUserStore } from '@/store'
 import { getCurrentDate } from '@/utils/functions'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
 
 const appStore = useAppStore()
+const userStore = useUserStore()
+
+const model = ref({
+  apiKey: '',
+  accessToken: '',
+  host: '',
+})
 
 const { isMobile } = useBasicLayout()
 
@@ -94,6 +101,11 @@ function clearData(): void {
   location.reload()
 }
 
+function resetHost(): void {
+  userStore.resetHost()
+  model.value.host = ''
+}
+
 function handleImportButtonClick(): void {
   const fileInput = document.getElementById('fileInput') as HTMLElement
   if (fileInput)
@@ -159,6 +171,18 @@ async function checkAppUpdate() {
             </template>
             {{ $t('chat.clearHistoryConfirm') }}
           </NPopconfirm>
+
+          <NPopconfirm placement="bottom" @positive-click="resetHost">
+            <template #trigger>
+              <NButton size="small">
+                <template #icon>
+                  <SvgIcon icon="ri:close-circle-line" />
+                </template>
+                {{ '恢复默认Host设置' }}
+              </NButton>
+            </template>
+            {{ '确定？' }}
+          </NPopconfirm>
         </div>
       </div>
       <div class="flex items-center space-x-4">
@@ -197,6 +221,68 @@ async function checkAppUpdate() {
             </template>
             检查更新
           </NButton>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <span class="flex-shrink-0 w-[100px]">Api Key 列表</span>
+        <div class="flex flex-wrap items-center gap-4">
+          <NInputGroup>
+            <NInput v-model:value="model.apiKey" />
+            <NButton @click="userStore.addApiKey(model.apiKey)">
+              添加
+            </NButton>
+          </NInputGroup>
+          <NList>
+            <NListItem v-for="item in userStore.userConfig.apiKeyList" :key="item">
+              <NTag> {{ item }} </NTag>
+              <NButton @click="userStore.deleteApiKey(item)">
+                删除
+              </NButton>
+            </NListItem>
+          </NList>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <span class="flex-shrink-0 w-[100px]">Access Token 列表</span>
+        <div class="flex flex-wrap items-center gap-4">
+          <NInputGroup>
+            <NInput v-model:value="model.accessToken" />
+            <NButton @click="userStore.addAccessToken(model.accessToken)">
+              添加
+            </NButton>
+          </NInputGroup>
+          <NList>
+            <NListItem v-for="item in userStore.userConfig.accessTokenList" :key="item">
+              <NTag type="info" class="mr-2">
+                {{ item }}
+              </NTag>
+              <NButton @click="userStore.deleteAccessToken(item)">
+                删除
+              </NButton>
+            </NListItem>
+          </NList>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <span class="flex-shrink-0 w-[100px]">Host 列表</span>
+        <div class="flex flex-wrap items-center gap-4">
+          <NInputGroup>
+            <NInput v-model:value="model.host" />
+            <NButton @click="userStore.addHost(model.host)">
+              添加
+            </NButton>
+          </NInputGroup>
+          <NList>
+            <NListItem v-for="item in userStore.userConfig.hostList" :key="item">
+              <NTag> {{ item }} </NTag>
+              <NButton @click="userStore.deleteHost(item)">
+                删除
+              </NButton>
+            </NListItem>
+          </NList>
         </div>
       </div>
     </div>

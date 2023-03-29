@@ -1,7 +1,7 @@
 # ChatGPT Tauri
 ChatGPT 桌面客户端，基于 [chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web)。
 
-__该客户端仅支持 open-api 的方式使用__
+__该客户端支持 open-api 和 access token 的方式使用__
 
 ## 预览
 
@@ -26,12 +26,7 @@ pnpm tauri build
 ## 感谢
 
 - 感谢 [chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web) 项目作者以及所有该项目的贡献者。
-
-## 赞助
-
-如果您觉得该项目对你有帮助，可以给我打赏一杯咖啡，感谢！
-
-<img width="320" src="docs/pay.jpg" alt="install">
+- 感谢 [ChatGPT-T](https://github.com/pljhonglu/ChatGPT-T) 项目作者以及所有该项目的贡献者。
 
 # License
 MIT

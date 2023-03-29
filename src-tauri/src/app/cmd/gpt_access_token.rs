@@ -61,6 +61,7 @@ pub struct FetchOption {
     pub proxy: Option<String>,
     pub host: String,
     pub apiKey: String,
+    pub accessToken: String,
     pub model: String,
     pub temperature: f32,
 
@@ -132,7 +133,7 @@ pub async fn fetch_chat_api_by_access_token(
         .post(option.host)
         .header("Accept", "text/event-stream")
         .header("Content-Type", "application/json")
-        .header("Authorization", format!("Bearer {}", option.apiKey))
+        .header("Authorization", format!("Bearer {}", option.accessToken))
         .header(
             reqwest::header::USER_AGENT,
             format!("ChatGPT-Tauri ({})", OS),

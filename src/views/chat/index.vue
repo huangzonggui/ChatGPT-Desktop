@@ -53,9 +53,9 @@ function handleSubmit() {
 
 async function fetchChatMessage(messages: Chat.RequestMessage[], uuid: number, index: number, options?: Chat.ConversationRequest) {
   const option = getSessionConfig(uuid)
-  const apiKey = option.apiKey
-  if (!apiKey || apiKey.trim() === '') {
-    ms.error('请先设置 api key')
+  const apiKeyOrAccessToken = option.accessType === '0' ? option.apiKey : option.accessToken
+  if (!apiKeyOrAccessToken || apiKeyOrAccessToken.trim() === '') {
+    ms.error('请先设置 api key 或 access token')
     return
   }
   controller = new AbortController()
@@ -66,7 +66,7 @@ async function fetchChatMessage(messages: Chat.RequestMessage[], uuid: number, i
     messages,
     merge_options,
     (detail: string, _: string, conversation_id?: string, parent_message_id?: string) => {
-      if (apiKey.startsWith('sk-'))
+      if (option.accessType === '0')
         lastText = lastText + detail ?? ''
       else
         lastText = detail ?? ''

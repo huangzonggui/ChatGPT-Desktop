@@ -5,3 +5,10 @@ export function getCurrentDate() {
   const year = date.getFullYear()
   return `${year}-${month}-${day}`
 }
+
+export const genOptionByList = (list: string[]) => {
+  return list.map(v => ({
+    label: v,
+    value: v,
+  }))
+}

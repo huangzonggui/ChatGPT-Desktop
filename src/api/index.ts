@@ -56,7 +56,7 @@ export async function fetchChatAPIProcess(
     }
   }
   let acceess_type = 'fetch_chat_api_by_access_token'
-  if (option.apiKey.startsWith('sk-'))
+  if (option.accessType === '0')
     acceess_type = 'fetch_chat_api_by_api_key'
 
   await invoke(acceess_type, {
